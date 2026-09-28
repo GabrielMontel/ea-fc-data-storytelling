@@ -307,33 +307,100 @@
   </div>
 </section>
 
-    <!-- ============ 03 · TERRAIN ============ -->
-    <section class="section chapter" id="chapitre-3">
-      <div class="container chapter__grid">
-        <header class="chapter__head reveal">
-          <div class="chapter__badge" aria-hidden="true">03</div>
-          <p class="eyebrow">Chapitre 03 · Terrain</p>
-          <h2 class="section-title">La note face <em>au terrain</em></h2>
-          <p class="chapter__question">La note globale permet-elle de prédire les performances réelles d'un joueur&nbsp;?</p>
-          <p class="chapter__text">
-            Buts, passes décisives, minutes jouées&nbsp;: on confronte les notes FC 27 aux statistiques
-            réelles de la saison pour voir si le jeu colle à la réalité.
-          </p>
-        </header>
+<!-- ============ 03 · SMART SCOUT ============ -->
+<section class="section chapter" id="chapitre-3">
+  <div class="container chapter__grid">
+    
+    <header class="chapter__head reveal">
+      <div class="chapter__badge" aria-hidden="true">03</div>
+      <p class="eyebrow">Chapitre 03 · Smart Scouting</p>
+      <h2 class="section-title">Trouve tes <em>pépites</em></h2>
+      <p class="chapter__question">Prêt à dénicher des joueurs ?</p>
+      <p class="chapter__text">
+        Filtre la base de données selon tes besoins tactiques. Règle la vitesse minimale, la note maximale et chaque attribut clé pour faire émerger les profils d'exception.
+      </p>
+    </header>
 
-        <figure class="viz reveal" id="viz-terrain">
-          <div class="viz__bar"><span class="viz__id">Dataviz 03</span><span class="viz__type">Format à définir</span></div>
-          <div class="viz__canvas" data-viz="terrain">
-            <div class="viz__placeholder">
-              <span class="viz__icon" aria-hidden="true"></span>
-              <span class="viz__label">Dataviz à venir</span>
-              <code>#viz-terrain</code>
-            </div>
-          </div>
-          <figcaption class="viz__caption">Source&nbsp;: à compléter</figcaption>
-        </figure>
+    <!-- Panneau de filtres complets pour l'Acte 3 -->
+    <div class="scout-controls" style="background: #161b22; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; border: 1px solid #30363d;">
+      
+      <div class="control-group">
+        <label for="filter-gender" style="color: #e6edf3; display: block; margin-bottom: 5px; font-size: 0.85rem;">Catégorie</label>
+        <select id="filter-gender" style="width: 100%; background: #0d1117; color: #e6edf3; border: 1px solid #30363d; padding: 6px; border-radius: 4px; cursor: pointer;">
+          <option value="Men's Football">Hommes</option>
+          <option value="Women's Football">Femmes</option>
+        </select>
       </div>
-    </section>
+
+      <div class="control-group">
+        <label for="filter-overall" style="color: #e6edf3; display: block; margin-bottom: 5px; font-size: 0.85rem;">Général Max : <strong id="val-overall" style="color: #00ff87;">83</strong></label>
+        <input type="range" id="filter-overall" min="70" max="95" value="83" style="width: 100%; cursor: pointer;">
+      </div>
+
+      <div class="control-group">
+        <label for="filter-pace" style="color: #e6edf3; display: block; margin-bottom: 5px; font-size: 0.85rem;">Vitesse (PAC) Min : <strong id="val-pace" style="color: #00ff87;">80</strong></label>
+        <input type="range" id="filter-pace" min="40" max="99" value="80" style="width: 100%; cursor: pointer;">
+      </div>
+
+      <div class="control-group">
+        <label for="filter-shooting" style="color: #e6edf3; display: block; margin-bottom: 5px; font-size: 0.85rem;">Tir (SHO) Min : <strong id="val-shooting" style="color: #00ff87;">60</strong></label>
+        <input type="range" id="filter-shooting" min="40" max="99" value="60" style="width: 100%; cursor: pointer;">
+      </div>
+
+      <div class="control-group">
+        <label for="filter-passing" style="color: #e6edf3; display: block; margin-bottom: 5px; font-size: 0.85rem;">Passe (PAS) Min : <strong id="val-passing" style="color: #00ff87;">60</strong></label>
+        <input type="range" id="filter-passing" min="40" max="99" value="60" style="width: 100%; cursor: pointer;">
+      </div>
+
+      <div class="control-group">
+        <label for="filter-dribbling" style="color: #e6edf3; display: block; margin-bottom: 5px; font-size: 0.85rem;">Dribble (DRI) Min : <strong id="val-dribbling" style="color: #00ff87;">70</strong></label>
+        <input type="range" id="filter-dribbling" min="40" max="99" value="70" style="width: 100%; cursor: pointer;">
+      </div>
+
+      <div class="control-group">
+        <label for="filter-defending" style="color: #e6edf3; display: block; margin-bottom: 5px; font-size: 0.85rem;">Défense (DEF) Min : <strong id="val-defending" style="color: #00ff87;">40</strong></label>
+        <input type="range" id="filter-defending" min="40" max="99" value="40" style="width: 100%; cursor: pointer;">
+      </div>
+
+      <div class="control-group">
+        <label for="filter-physicality" style="color: #e6edf3; display: block; margin-bottom: 5px; font-size: 0.85rem;">Physique (PHY) Min : <strong id="val-physicality" style="color: #00ff87;">50</strong></label>
+        <input type="range" id="filter-physicality" min="40" max="99" value="50" style="width: 100%; cursor: pointer;">
+      </div>
+
+    </div>
+
+    <!-- Preview de la Carte FUT -->
+    <div id="fut-card-preview" style="margin-bottom: 20px; display: flex; justify-content: center;">
+      <div style="background: linear-gradient(135deg, #1e232a, #0d1117); border: 2px solid #00ff87; border-radius: 12px; padding: 20px; width: 260px; text-align: center; color: #e6edf3; box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
+        <div style="font-size: 0.8rem; text-transform: uppercase; color: #8b949e;" id="card-pos-club">POS · CLUB</div>
+        <div style="font-size: 2.2rem; font-weight: bold; color: #00ff87; margin: 5px 0;" id="card-overall">--</div>
+        <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 15px;" id="card-name">Chargement...</div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9rem; text-align: left; background: #161b22; padding: 10px; border-radius: 8px;">
+          <div>PAC: <strong id="card-pac" style="color:#00ff87;">--</strong></div>
+          <div>DRI: <strong id="card-dri">--</strong></div>
+          <div>SHO: <strong id="card-sho">--</strong></div>
+          <div>DEF: <strong id="card-def">--</strong></div>
+          <div>PAS: <strong id="card-pas">--</strong></div>
+          <div>PHY: <strong id="card-phy">--</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emplacement du graphique Plotly -->
+    <figure class="viz reveal" id="viz-scout">
+      <div class="viz__bar">
+        <span class="viz__id">Dataviz 03</span>
+        <span class="viz__type">Scatter Plot Filtrable</span>
+      </div>
+      
+      <div class="viz__canvas" id="chart-scout" style="width: 100%; min-height: 450px;"></div>
+      
+      <figcaption class="viz__caption">Source : Fichier EA FC 27 (players.csv)</figcaption>
+    </figure>
+
+  </div>
+</section>
 
     <!-- ============ 04 · MÉTA ============ -->
     <section class="section chapter chapter--alt chapter--reverse" id="chapitre-4">
