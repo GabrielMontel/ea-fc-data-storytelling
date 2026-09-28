@@ -31,7 +31,7 @@
   <header class="nav">
     <a class="nav__brand" href="#accueil" aria-label="Retour à l'accueil">
       <svg class="nav__logo" viewBox="0 0 40 36" aria-hidden="true"><path d="M20 0 40 36H0Z"/></svg>
-      <span class="nav__title">OVR<span>/</span>Illusion</span>
+      <span class="nav__title">SAE<span>/</span>303</span>
     </a>
 
     <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
@@ -273,38 +273,39 @@
             <!-- Graphique généré par js/app.js (Plotly) -->
             <div id="chart-explosion" class="viz__chart"></div>
           </div>
-          <figcaption class="viz__caption">Source&nbsp;: players.csv (EA SPORTS FC 27)</figcaption>
+          <figcaption class="viz__caption">Source&nbsp;: jeu de données (EA SPORTS FC 27)</figcaption>
         </figure>
       </div>
     </section>
 
     <!-- ============ 02 · PROFILS ============ -->
-    <section class="section chapter chapter--alt chapter--reverse" id="chapitre-2">
-      <div class="container chapter__grid">
-        <header class="chapter__head reveal">
-          <div class="chapter__badge" aria-hidden="true">02</div>
-          <p class="eyebrow">Chapitre 02 · Profils</p>
-          <h2 class="section-title">Même note, <em>autre joueur</em></h2>
-          <p class="chapter__question">Deux joueurs avec la même note globale se ressemblent-ils vraiment&nbsp;?</p>
-          <p class="chapter__text">
-            À note égale, les profils peuvent diverger du tout au tout&nbsp;: vitesse, technique, impact physique.
-            On compare des joueurs à OVR identique pour mesurer l'écart.
-          </p>
-        </header>
+<section class="section chapter chapter--alt chapter--reverse" id="chapitre-2">
+  <div class="container chapter__grid">
+    
+    <header class="chapter__head reveal">
+      <div class="chapter__badge" aria-hidden="true">02</div>
+      <p class="eyebrow">Chapitre 02 · Profils</p>
+      <h2 class="section-title">La complémentarité <em>bat le prestige</em></h2>
+      <p class="chapter__question">Pourquoi payer pour une star quand une pépite fait le même job ?</p>
+      <p class="chapter__text">
+        En superposant les profils, le constat est frappant : la pépite à 82 de général rivalise directement avec la star à 91 sur les attributs clés du poste (vitesse et dribble). La star coûte cher pour sa réputation et sa polyvalence, mais sur le terrain, l'efficacité brute est quasi identique.
+      </p>
+    </header>
 
-        <figure class="viz reveal" id="viz-profils">
-          <div class="viz__bar"><span class="viz__id">Dataviz 02</span><span class="viz__type">Format à définir</span></div>
-          <div class="viz__canvas" data-viz="profils">
-            <div class="viz__placeholder">
-              <span class="viz__icon" aria-hidden="true"></span>
-              <span class="viz__label">Dataviz à venir</span>
-              <code>#viz-profils</code>
-            </div>
-          </div>
-          <figcaption class="viz__caption">Source&nbsp;: à compléter</figcaption>
-        </figure>
+    <figure class="viz reveal" id="viz-profils">
+      <div class="viz__bar">
+        <span class="viz__id">Dataviz 02</span>
+        <span class="viz__type">Radar Chart</span>
       </div>
-    </section>
+      
+      <!-- C'est ici que Plotly injectera le graphique radar -->
+      <div class="viz__canvas" id="chart-radar" data-viz="profils"></div>
+      
+      <figcaption class="viz__caption">Source : Fichier EA FC 27 (players.csv)</figcaption>
+    </figure>
+
+  </div>
+</section>
 
     <!-- ============ 03 · TERRAIN ============ -->
     <section class="section chapter" id="chapitre-3">
@@ -399,21 +400,21 @@
         <div>
           <h3 class="footer__title">Sources</h3>
           <ul class="footer__list">
-            <li>Données&nbsp;: à compléter</li>
+            <li>Données&nbsp;: jeu de données FIFPro</li>
           </ul>
         </div>
 
         <div>
           <h3 class="footer__title">Projet</h3>
           <ul class="footer__list">
-            <li>SAE 303 · Data visualisation</li>
-            <li>Réalisé par&nbsp;: à compléter</li>
+            <li>SAE 303 · projet de dataviz</li>
+            <li>Réalisé par&nbsp;: Noah Perdriset & Gabriel Montel</li>
           </ul>
         </div>
       </div>
 
       <div class="footer__bottom">
-        <span>© <span data-year>2026</span> · OVR/Illusion</span>
+        <span>© <span data-year>2026</span> · SAE 303</span>
         <a href="#accueil">Retour en haut</a>
       </div>
     </div>
