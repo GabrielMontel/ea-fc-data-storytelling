@@ -1,17 +1,422 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
-    <title>Dataviz FC27</title>
-    <script src="js/utils.js"></script>
-<script src="js/app.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La note globale&nbsp;: vérité ou illusion&nbsp;? · FC 27 Dataviz</title>
+  <meta name="description" content="Faut-il se fier à la note globale d'un joueur dans EA SPORTS FC 27, ou est-ce une illusion&nbsp;? Un projet de data visualisation.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 36'%3E%3Cpath d='M20 0 40 36H0Z' fill='%231ef38a'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700;1,800;1,900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Librairies dataviz -->
+  <script src="https://d3js.org/d3.v7.min.js" defer></script>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" defer></script>
+
+  <script src="js/utils.js" defer></script>
+  <script src="js/app.js" defer></script>
+  <script src="js/ui.js" defer></script>
 </head>
 <body>
-    <div id="chart-explosion" style="width: 100%; height: 100%;"></div>
-    <h2>Un général élevé garantit-il les meilleures compétences ?</h2>
-    <p>En observant la répartition ci-dessus, le constat est sans appel : la note globale ne reflète pas directement les qualités athlétiques pures. Plusieurs pépites notées sous la barre des 80 surpassent largement les cadors du football mondial en vitesse pure.</p>
+  <a class="skip-link" href="#principe">Aller au contenu</a>
+
+  <!-- Barre de progression de lecture -->
+  <div class="progress" aria-hidden="true"><span class="progress__bar"></span></div>
+
+  <!-- ============ NAVIGATION ============ -->
+  <header class="nav">
+    <a class="nav__brand" href="#accueil" aria-label="Retour à l'accueil">
+      <svg class="nav__logo" viewBox="0 0 40 36" aria-hidden="true"><path d="M20 0 40 36H0Z"/></svg>
+      <span class="nav__title">OVR<span>/</span>Illusion</span>
+    </a>
+
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+      <span class="sr-only">Ouvrir le menu</span>
+      <span class="nav__burger" aria-hidden="true"></span>
+    </button>
+
+    <nav class="nav__menu" id="nav-menu" aria-label="Navigation principale">
+      <ul>
+        <li><a href="#principe"><b>00</b>Principe</a></li>
+        <li><a href="#chapitre-1"><b>01</b>Vitesse</a></li>
+        <li><a href="#chapitre-2"><b>02</b>Profils</a></li>
+        <li><a href="#chapitre-3"><b>03</b>Terrain</a></li>
+        <li><a href="#chapitre-4"><b>04</b>Méta</a></li>
+        <li><a href="#verdict"><b>FT</b>Verdict</a></li>
+      </ul>
+    </nav>
+
+    <span class="nav__tag">FC 27</span>
+  </header>
+
+  <main>
+    <!-- ============ HERO / AFFICHE ============ -->
+    <section class="hero" id="accueil">
+      <div class="hero__bg" aria-hidden="true">
+        <div class="hero__beam hero__beam--left"></div>
+        <div class="hero__beam hero__beam--right"></div>
+        <div class="hero__pattern"></div>
+        <div class="hero__pitch"></div>
+        <span class="hero__big">27</span>
+      </div>
+
+      <div class="container hero__grid">
+        <div class="hero__content">
+          <p class="eyebrow"><span class="tri" aria-hidden="true"></span>EA SPORTS FC 27 · Data visualisation</p>
+
+          <h1 class="hero__title">
+            <span class="hero__line">La note</span>
+            <span class="hero__line hero__line--metal">globale</span>
+            <span class="hero__line hero__line--sub">vérité ou illusion&nbsp;?</span>
+          </h1>
+
+          <p class="hero__question">«&nbsp;Faut-il se fier à la note globale d'un joueur, ou est-ce une illusion&nbsp;?&nbsp;»</p>
+
+          <p class="hero__lead">
+            Sur chaque carte, un chiffre attire l'œil avant tous les autres. Derrière lui se cachent
+            des dizaines d'attributs, des pondérations par poste et un méta qui n'en fait qu'à sa tête.
+            Décryptage, données à l'appui.
+          </p>
+
+          <div class="hero__actions">
+            <a href="#principe" class="btn btn--primary"><span>Coup d'envoi</span></a>
+            <a href="#chapitre-1" class="btn btn--ghost"><span>Voir les dataviz</span></a>
+          </div>
+        </div>
+
+        <!-- Carte joueur façon Ultimate Team -->
+        <div class="hero__card-zone" data-tilt-zone>
+          <div class="indicator" aria-hidden="true"></div>
+
+          <div class="card-float">
+            <article class="fut-card" data-tilt aria-label="Carte fictive&nbsp;: note globale 91, buteur">
+              <div class="fut-card__frame"></div>
+              <div class="fut-card__body">
+                <div class="fut-card__texture"></div>
+
+                <div class="fut-card__top">
+                  <span class="fut-card__rating" data-count="91">91</span>
+                  <span class="fut-card__pos">BU</span>
+                  <span class="fut-card__icons" aria-hidden="true">
+                    <svg viewBox="0 0 24 21"><path d="M12 0 24 21H0Z"/></svg>
+                    <svg viewBox="0 0 24 28"><path d="M12 0 24 4v10c0 7-5 11-12 14C5 25 0 21 0 14V4Z"/></svg>
+                  </span>
+                </div>
+
+                <svg class="fut-card__player" viewBox="0 0 120 120" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="silhouette" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stop-color="#5a3f0e" stop-opacity=".85"/>
+                      <stop offset="1" stop-color="#5a3f0e" stop-opacity=".15"/>
+                    </linearGradient>
+                  </defs>
+                  <circle cx="60" cy="40" r="21" fill="url(#silhouette)"/>
+                  <path d="M8 120c3-30 24-50 52-50s49 20 52 50Z" fill="url(#silhouette)"/>
+                </svg>
+
+                <p class="fut-card__name">Illusion</p>
+
+                <dl class="fut-card__stats">
+                  <div><dt>VIT</dt><dd data-count="96">96</dd></div>
+                  <div><dt>TIR</dt><dd data-count="90">90</dd></div>
+                  <div><dt>PAS</dt><dd data-count="81">81</dd></div>
+                  <div><dt>DRI</dt><dd data-count="92">92</dd></div>
+                  <div><dt>DEF</dt><dd data-count="37">37</dd></div>
+                  <div><dt>PHY</dt><dd data-count="78">78</dd></div>
+                </dl>
+
+                <div class="fut-card__chem" aria-hidden="true"><i></i><i></i><i></i></div>
+              </div>
+              <div class="fut-card__holo" aria-hidden="true"></div>
+              <div class="fut-card__glare" aria-hidden="true"></div>
+            </article>
+          </div>
+
+          <p class="hero__card-note">Carte fictive · effet holographique FC 27</p>
+        </div>
+      </div>
+
+      <a class="hero__scroll" href="#principe"><span>Défiler</span><i aria-hidden="true"></i></a>
+    </section>
+
+    <!-- ============ BANDEAUX DÉFILANTS ============ -->
+    <div class="ribbons" aria-hidden="true">
+      <div class="ribbon ribbon--back">
+        <div class="ribbon__track ribbon__track--reverse">
+          <div class="ribbon__group">
+            <span>Vérité&nbsp;?</span><i></i><span>Illusion&nbsp;?</span><i></i>
+          </div>
+        </div>
+      </div>
+      <div class="ribbon ribbon--front">
+        <div class="ribbon__track">
+          <div class="ribbon__group">
+            <span>VIT</span><i></i><span>TIR</span><i></i><span>PAS</span><i></i>
+            <span>DRI</span><i></i><span>DEF</span><i></i><span>PHY</span><i></i><span>OVR&nbsp;?</span><i></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 00 · LE PRINCIPE ============ -->
+    <section class="section principe" id="principe">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="section-head__num" aria-hidden="true">00</span>
+          <div>
+            <p class="eyebrow"><span class="tri" aria-hidden="true"></span>Le principe</p>
+            <h2 class="section-title">29 attributs. 6 stats. <em>1 seul chiffre.</em></h2>
+          </div>
+        </header>
+
+        <p class="section-intro reveal">
+          Dans EA SPORTS FC 27, chaque joueur est décrit par 29 attributs détaillés. Ils sont regroupés
+          en 6 statistiques affichées sur sa carte, puis résumés en un seul nombre&nbsp;: la note globale (OVR),
+          calculée avec une pondération différente selon le poste. Un chiffre pour résumer tout un joueur…
+          que perd-on en route&nbsp;?
+        </p>
+
+        <ol class="funnel">
+          <li class="funnel__step reveal" style="--i:0">
+            <span class="funnel__num" data-count="29">29</span>
+            <span class="funnel__label">attributs détaillés</span>
+            <p>Accélération, finition, vista, tacle glissé, détente…</p>
+          </li>
+          <li class="funnel__step reveal" style="--i:1">
+            <span class="funnel__num" data-count="6">6</span>
+            <span class="funnel__label">statistiques de carte</span>
+            <p>VIT, TIR, PAS, DRI, DEF, PHY&nbsp;: ce que l'on voit en premier.</p>
+          </li>
+          <li class="funnel__step funnel__step--final reveal" style="--i:2">
+            <span class="funnel__num">1</span>
+            <span class="funnel__label">note globale</span>
+            <p>Calculée à partir des attributs, avec une pondération propre à chaque poste.</p>
+          </li>
+        </ol>
+
+        <div class="stats-grid">
+          <article class="stat-tile reveal" style="--i:0">
+            <span class="stat-tile__count">2</span>
+            <h3 class="stat-tile__abbr">VIT</h3>
+            <span class="stat-tile__name">Vitesse</span>
+            <ul><li>Accélération</li><li>Vitesse de pointe</li></ul>
+          </article>
+          <article class="stat-tile reveal" style="--i:1">
+            <span class="stat-tile__count">6</span>
+            <h3 class="stat-tile__abbr">TIR</h3>
+            <span class="stat-tile__name">Tir</span>
+            <ul><li>Placement</li><li>Finition</li><li>Puissance de frappe</li><li>Tirs de loin</li><li>Volées</li><li>Penaltys</li></ul>
+          </article>
+          <article class="stat-tile reveal" style="--i:2">
+            <span class="stat-tile__count">6</span>
+            <h3 class="stat-tile__abbr">PAS</h3>
+            <span class="stat-tile__name">Passe</span>
+            <ul><li>Vista</li><li>Centres</li><li>Précision coups francs</li><li>Passes courtes</li><li>Passes longues</li><li>Effets</li></ul>
+          </article>
+          <article class="stat-tile reveal" style="--i:3">
+            <span class="stat-tile__count">6</span>
+            <h3 class="stat-tile__abbr">DRI</h3>
+            <span class="stat-tile__name">Dribble</span>
+            <ul><li>Agilité</li><li>Équilibre</li><li>Réactivité</li><li>Contrôle du ballon</li><li>Dribbles</li><li>Sang-froid</li></ul>
+          </article>
+          <article class="stat-tile reveal" style="--i:4">
+            <span class="stat-tile__count">5</span>
+            <h3 class="stat-tile__abbr">DEF</h3>
+            <span class="stat-tile__name">Défense</span>
+            <ul><li>Interceptions</li><li>Jeu de tête</li><li>Conscience défensive</li><li>Tacle debout</li><li>Tacle glissé</li></ul>
+          </article>
+          <article class="stat-tile reveal" style="--i:5">
+            <span class="stat-tile__count">4</span>
+            <h3 class="stat-tile__abbr">PHY</h3>
+            <span class="stat-tile__name">Physique</span>
+            <ul><li>Détente</li><li>Endurance</li><li>Puissance</li><li>Agressivité</li></ul>
+          </article>
+        </div>
+
+        <!-- Pronostic du visiteur, rappelé dans le verdict -->
+        <div class="poll reveal" id="pronostic">
+          <div class="poll__text">
+            <p class="eyebrow"><span class="tri" aria-hidden="true"></span>Ton pronostic</p>
+            <h3>Avant de voir les données&nbsp;: la note globale, tu y crois&nbsp;?</h3>
+          </div>
+          <div class="poll__choices" role="group" aria-label="Ton pronostic">
+            <button type="button" class="choice choice--truth" data-vote="verite" aria-pressed="false"><span>Vérité</span></button>
+            <button type="button" class="choice choice--illusion" data-vote="illusion" aria-pressed="false"><span>Illusion</span></button>
+          </div>
+          <p class="poll__feedback" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 01 · VITESSE ============ -->
+    <section class="section chapter" id="chapitre-1">
+      <div class="container chapter__grid">
+        <header class="chapter__head reveal">
+          <div class="chapter__badge" aria-hidden="true">01</div>
+          <p class="eyebrow">Chapitre 01 · Vitesse</p>
+          <h2 class="section-title">Ce que cache <em>vraiment</em> la note</h2>
+          <p class="chapter__question">Un général élevé garantit-il les meilleures compétences&nbsp;?</p>
+          <p class="chapter__text">
+            En observant la répartition ci-contre, le constat est sans appel&nbsp;: la note globale ne reflète pas
+            directement les qualités athlétiques pures. Plusieurs pépites notées sous la barre des 80 surpassent
+            largement les cadors du football mondial en vitesse pure.
+          </p>
+        </header>
+
+        <figure class="viz reveal" id="viz-vitesse">
+          <div class="viz__bar"><span class="viz__id">Dataviz 01</span><span class="viz__type">Nuage de points</span></div>
+          <div class="viz__canvas">
+            <!-- Graphique généré par js/app.js (Plotly) -->
+            <div id="chart-explosion" class="viz__chart"></div>
+          </div>
+          <figcaption class="viz__caption">Source&nbsp;: players.csv (EA SPORTS FC 27)</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ 02 · PROFILS ============ -->
+    <section class="section chapter chapter--alt chapter--reverse" id="chapitre-2">
+      <div class="container chapter__grid">
+        <header class="chapter__head reveal">
+          <div class="chapter__badge" aria-hidden="true">02</div>
+          <p class="eyebrow">Chapitre 02 · Profils</p>
+          <h2 class="section-title">Même note, <em>autre joueur</em></h2>
+          <p class="chapter__question">Deux joueurs avec la même note globale se ressemblent-ils vraiment&nbsp;?</p>
+          <p class="chapter__text">
+            À note égale, les profils peuvent diverger du tout au tout&nbsp;: vitesse, technique, impact physique.
+            On compare des joueurs à OVR identique pour mesurer l'écart.
+          </p>
+        </header>
+
+        <figure class="viz reveal" id="viz-profils">
+          <div class="viz__bar"><span class="viz__id">Dataviz 02</span><span class="viz__type">Format à définir</span></div>
+          <div class="viz__canvas" data-viz="profils">
+            <div class="viz__placeholder">
+              <span class="viz__icon" aria-hidden="true"></span>
+              <span class="viz__label">Dataviz à venir</span>
+              <code>#viz-profils</code>
+            </div>
+          </div>
+          <figcaption class="viz__caption">Source&nbsp;: à compléter</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ 03 · TERRAIN ============ -->
+    <section class="section chapter" id="chapitre-3">
+      <div class="container chapter__grid">
+        <header class="chapter__head reveal">
+          <div class="chapter__badge" aria-hidden="true">03</div>
+          <p class="eyebrow">Chapitre 03 · Terrain</p>
+          <h2 class="section-title">La note face <em>au terrain</em></h2>
+          <p class="chapter__question">La note globale permet-elle de prédire les performances réelles d'un joueur&nbsp;?</p>
+          <p class="chapter__text">
+            Buts, passes décisives, minutes jouées&nbsp;: on confronte les notes FC 27 aux statistiques
+            réelles de la saison pour voir si le jeu colle à la réalité.
+          </p>
+        </header>
+
+        <figure class="viz reveal" id="viz-terrain">
+          <div class="viz__bar"><span class="viz__id">Dataviz 03</span><span class="viz__type">Format à définir</span></div>
+          <div class="viz__canvas" data-viz="terrain">
+            <div class="viz__placeholder">
+              <span class="viz__icon" aria-hidden="true"></span>
+              <span class="viz__label">Dataviz à venir</span>
+              <code>#viz-terrain</code>
+            </div>
+          </div>
+          <figcaption class="viz__caption">Source&nbsp;: à compléter</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ 04 · MÉTA ============ -->
+    <section class="section chapter chapter--alt chapter--reverse" id="chapitre-4">
+      <div class="container chapter__grid">
+        <header class="chapter__head reveal">
+          <div class="chapter__badge" aria-hidden="true">04</div>
+          <p class="eyebrow">Chapitre 04 · Méta</p>
+          <h2 class="section-title">Le méta <em>ne ment pas</em></h2>
+          <p class="chapter__question">Les cartes les plus jouées en Ultimate Team sont-elles les mieux notées&nbsp;?</p>
+          <p class="chapter__text">
+            Sur le terrain virtuel, la vitesse et les PlayStyles font souvent la différence.
+            On compare la note des cartes à leur popularité et à leur prix sur le marché des transferts.
+          </p>
+        </header>
+
+        <figure class="viz reveal" id="viz-meta">
+          <div class="viz__bar"><span class="viz__id">Dataviz 04</span><span class="viz__type">Format à définir</span></div>
+          <div class="viz__canvas" data-viz="meta">
+            <div class="viz__placeholder">
+              <span class="viz__icon" aria-hidden="true"></span>
+              <span class="viz__label">Dataviz à venir</span>
+              <code>#viz-meta</code>
+            </div>
+          </div>
+          <figcaption class="viz__caption">Source&nbsp;: à compléter</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ VERDICT ============ -->
+    <section class="verdict" id="verdict">
+      <span class="verdict__word verdict__word--truth" aria-hidden="true">Vérité</span>
+      <span class="verdict__word verdict__word--illusion" aria-hidden="true">Illusion</span>
+
+      <div class="container verdict__content reveal">
+        <p class="eyebrow"><span class="tri" aria-hidden="true"></span>Coup de sifflet final</p>
+        <h2 class="verdict__title">Vérité <span>ou</span> illusion&nbsp;?</h2>
+        <p class="verdict__text">
+          Le verdict sera rendu à la fin de l'analyse, une fois toutes les données passées au crible.
+        </p>
+        <p class="verdict__recall" data-recall>
+          Tu n'as pas encore fait ton pronostic. <a href="#pronostic">Je fais mon choix</a>
+        </p>
+        <a href="#chapitre-1" class="btn btn--ghost"><span>Revoir l'analyse</span></a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a class="nav__brand" href="#accueil">
+            <svg class="nav__logo" viewBox="0 0 40 36" aria-hidden="true"><path d="M20 0 40 36H0Z"/></svg>
+            <span class="nav__title">OVR<span>/</span>Illusion</span>
+          </a>
+          <p>
+            Projet étudiant non officiel, non affilié à Electronic Arts.
+            EA SPORTS FC™ est une marque déposée d'Electronic Arts Inc.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="footer__title">Sources</h3>
+          <ul class="footer__list">
+            <li>Données&nbsp;: à compléter</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="footer__title">Projet</h3>
+          <ul class="footer__list">
+            <li>SAE 303 · Data visualisation</li>
+            <li>Réalisé par&nbsp;: à compléter</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span>© <span data-year>2026</span> · OVR/Illusion</span>
+        <a href="#accueil">Retour en haut</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
